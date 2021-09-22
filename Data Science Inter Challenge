@@ -1,0 +1,65 @@
+Shopify Technical Challenge Submission
+
+Question 1:
+
+Part (a) Think about what could be going wrong with our calculation. Think about a better way to evaluate this data.
+
+Answer: Average Order Value(AOV) is calculated as Revenue or Sales per Number of Orders. In this case, it seems like as if AOV was calculated as Revenue or sales per customer.
+                    
+ AOV in given example is calculated as (Revenue or Sales) /(Number of customers) = 15725640/5000 = 3145.13 
+
+
+Part (b) what metric would you report for this dataset?
+
+Answer: In order to calculate AOV correctly, we will use the correct formula of AOV :
+
+AOV  =  (Revenue or Sales) /(Number of orders) = 15725640/43936 = 357.92
+
+Part (c) what is its value ?
+
+Answer: Hence, the correct AOV value is $ 357.92.
+
+
+
+
+CODE for Question 1 in Python:
+
+import pandas as pd
+
+data = pd.read_excel(r'C:\Users\deepa\Downloads\excel.xlsx')#please use the correct path for excel sheet
+
+# this is the wrong calculation method for AOV
+Order_A = data['order_amount'].sum()
+Total_I = data['total_items'].count()
+Wrong_AOV = Order_A/Total_I
+
+print("The Incorrect Average Order Value is $ %.2f" % Wrong_AOV)
+
+#the correct method for Calculating AOV is as follows
+Order_Amount = data['order_amount'].sum()
+Total_Items = data['total_items'].sum()
+Correct_AOV = Order_Amount/Total_Items
+
+print("The CORRECT Average Order Value is $ %.2f" % Correct_AOV)
+
+
+Question 2:
+
+a.How many orders were shipped by Speedy Express in total?
+
+Answer: Speedy Express shipped 54 orders in total.
+Query:
+select COUNT(OrderID) from Orders where ShipperID ="1";
+
+b.What is the last name of the employee with the most orders?
+
+Answer: The last name of the employee with most orders is Peacock and has 40 orders.
+Query: 
+select Employees.LastName, COUNT(Orders.OrderID) as most_orders from Employees, Orders where Employees.EmployeeID = Orders.EmployeeID GROUP BY Employees.EmployeeID ORDER BY most_orders DESC LIMIT 1;
+
+c.What product was ordered the most by customers in Germany?
+
+Answer: Boston Crab Meat was ordered the most by customers in Germany. The Quantity ordered was 160 units.
+Query:  
+select Products.ProductName, SUM(OrderDetails.Quantity) as Quantity from Customers, OrderDetails, Orders, Products where Customers.CustomerID = Orders.CustomerID AND Orders.OrderID = OrderDetails.OrderID AND OrderDetails.ProductID = Products.ProductID AND Customers.Country = "Germany" GROUP BY Products.ProductID ORDER BY Quantity DESC LIMIT 1;
+  
